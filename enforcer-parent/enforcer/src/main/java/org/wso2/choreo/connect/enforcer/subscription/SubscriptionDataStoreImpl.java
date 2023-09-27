@@ -292,6 +292,7 @@ public class SubscriptionDataStoreImpl implements SubscriptionDataStore {
             mapping.setConsumerKey(applicationKeyMapping.getConsumerKey());
             mapping.setKeyType(applicationKeyMapping.getKeyType());
             mapping.setKeyManager(applicationKeyMapping.getKeyManager());
+            mapping.setEnvId(applicationKeyMapping.getEnvId());
 
             newApplicationKeyMappingMap.put(mapping.getCacheKey(), mapping);
         }

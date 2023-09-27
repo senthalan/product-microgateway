@@ -289,6 +289,8 @@ func handleLifeCycleEvents(data []byte) {
 
 // handleApplicationEvents to process application related events
 func handleApplicationEvents(data []byte, eventType string) {
+	//todo  Need to check this event handling.
+	logger.LoggerInternalMsg.Infof("Application event type : %s", eventType)
 	if strings.EqualFold(applicationRegistration, eventType) ||
 		strings.EqualFold(removeApplicationKeyMapping, eventType) {
 		var applicationRegistrationEvent msg.ApplicationRegistrationEvent
@@ -304,10 +306,13 @@ func handleApplicationEvents(data []byte, eventType string) {
 			return
 		}
 
+		logger.LoggerInternalMsg.Infof("Application Key Mapping event for the Consumer Key : %+v", applicationRegistrationEvent)
+
 		applicationKeyMapping := types.ApplicationKeyMapping{ApplicationID: applicationRegistrationEvent.ApplicationID,
 			ConsumerKey: applicationRegistrationEvent.ConsumerKey, KeyType: applicationRegistrationEvent.KeyType,
 			KeyManager: applicationRegistrationEvent.KeyManager, TenantID: -1, TenantDomain: applicationRegistrationEvent.TenantDomain,
-			TimeStamp: applicationRegistrationEvent.TimeStamp, ApplicationUUID: applicationRegistrationEvent.ApplicationUUID}
+			TimeStamp: applicationRegistrationEvent.TimeStamp, ApplicationUUID: applicationRegistrationEvent.ApplicationUUID,
+			EnvID: applicationRegistrationEvent.EnvID}
 
 		applicationKeyMappingReference := xds.GetApplicationKeyMappingReference(&applicationKeyMapping)
 
@@ -336,6 +341,8 @@ func handleApplicationEvents(data []byte, eventType string) {
 				applicationEvent.ApplicationName, applicationEvent.UUID, applicationEvent.TenantDomain)
 			return
 		}
+
+		logger.LoggerInternalMsg.Infof("Application Key Mapping event for the Consumer Key : %+v", applicationEvent)
 
 		app := types.Application{UUID: applicationEvent.UUID, ID: applicationEvent.ApplicationID,
 			Name: applicationEvent.ApplicationName, SubName: applicationEvent.Subscriber,
